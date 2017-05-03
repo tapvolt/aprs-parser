@@ -1,0 +1,8 @@
+{
+  "name": "aprs-parser",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/tapvolt/aprs-parser.git",
+  "author": "Gareth Jackson",
+  "license": "MIT"
+}
