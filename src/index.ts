@@ -1,60 +1,65 @@
-import * as config from "config"
 import * as assert from "assert"
+import * as types from "./types"
+import * as config from "config"
 import * as log from "winston"
-const dgram = require("dgram")
+import { Utils } from "./utils"
+import TelnetHandler from "./telnet"
+import DbHandler from "./db"
+import ServerHandler from "./server";
 
 export async function main() {
 
     // Verify
     [
-        "APRSServer.udp"
+        "app.name",
+        "app.version",
+
+        "telnet.host",
+        "telnet.port",
+        "telnet.username",
+        "telnet.password",
+
+        "APRSServer.udp",
+        "APRSServer.filter",
+
+        "mysql.host",
+        "mysql.username",
+        "mysql.password",
+        "mysql.database",
+
     ].forEach((key: string) => {
         assert(config.has(key), "Missing key in config")
     });
 
-    const aprs = config.get<any>("APRSServer");
+    const appConfig = config.get<types.appConfig>("app"),
+        telnetConfig = config.get<types.telnetConfig>("telnet"),
+        APRSConfig = config.get<types.APRSConfig>("APRSServer"),
+        mysqlConfig = config.get<types.mysqlConfig>("mysql");
 
+    Utils.logger();
 
-    // Log
+    const db = new DbHandler(mysqlConfig);
+    await db.connect();
 
+    const telnet = new TelnetHandler(appConfig, telnetConfig, APRSConfig.udp);
+    await telnet.connect();
 
-    // Server
-    const server = dgram.createSocket("udp4");
-
-    server.on("listening", () => {
-        let add = server.address();
-        log.info(`[Server] listening`, {address: add.address, port: add.port})
-    });
-
-    server.on("message", (msg, rinfo) => {
-        log.info(`[Server] Message received`, {message: msg.toString(), rinfo: rinfo})
-    })
-
-    server.on("error", (e) => {
-        log.error(`[Server] Error`, {error: e});
-        server.close()
-    })
-
-    server.on("close", () => {
-        log.error(`[Server] Close`);
-    })
-
-    server.bind(aprs.udp);
-
+    const server = new ServerHandler(APRSConfig.udp, db);
+    await server.bind();
 
     // Shutdown
     const close = () => {
-      log.info(`Shutting down...`);
-      server.close()
+        telnet.close();
+        server.close();
+        db.close();
     };
     process.on("SIGINT", close);
     process.on("SIGTERM", close);
-
 }
 
 if (require.main === module) {
-    main().catch((e) => {
-        log.error(`Error encountered`, e);
+    main().catch((err) => {
+        log.error("Error encountered", {error: err});
         process.exit(1)
     })
 }

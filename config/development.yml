@@ -1,9 +1,19 @@
-APRSServer:
-  host: england.aprs2.net
-  port: 14579
+app:
+  name: aprs-parser
+  version: 0.1
+
+telnet:
+  host: first.aprs.net
+  port: 10152
   username: AE5PL-TS
   password: -1
-  softwarename: aprs-parser
-  softwarever: 0.1
+
+APRSServer:
   udp: 54321
   filter:
+
+mysql:
+  host: localhost
+  username: root
+  password:
+  database: aprs

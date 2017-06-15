@@ -1,15 +1,29 @@
 import * as log from "winston"
-const dgram = require("dgram")
 
 export namespace Utils {
 
-    export default class Server {
+    export function logger() {
+        log.remove(log.transports.Console);
+        log.add(log.transports.Console, {
+            timestamp: () => {
+                return new Date().toISOString()
+            },
+            formatter: (options) => {
+                return options.timestamp() +' '+ options.level.toUpperCase() +' '+ (options.message ? options.message : '') +
+                    (options.meta && Object.keys(options.meta).length ? ' '+ JSON.stringify(options.meta) : '' );
+            }
+        })
 
-        constructor() {
-            let server = dgram.createSocket("udp4");
-        }
-
-
+        log.add(log.transports.File, {
+            filename: "error.log",
+            level: "error",
+            timestamp: () => {
+                return new Date().toISOString()
+            },
+            formatter: (options) => {
+                return options.timestamp() + ' ' + options.level.toUpperCase() + ' ' + (options.message ? options.message : '') +
+                    (options.meta && Object.keys(options.meta).length ? ' ' + JSON.stringify(options.meta) : '' );
+            }
+        })
     }
-
 }
