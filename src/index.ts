@@ -35,16 +35,20 @@ export async function main() {
         telnetConfig = config.get<types.telnetConfig>("telnet"),
         APRSConfig = config.get<types.APRSConfig>("APRSServer"),
         mysqlConfig = config.get<types.mysqlConfig>("mysql");
+    let offset = 0;
 
     Utils.logger();
+    if (Utils.isWifi()) {
+        offset = 1;
+    }
 
     const db = new DbHandler(mysqlConfig);
     await db.connect();
 
-    const telnet = new TelnetHandler(appConfig, telnetConfig, APRSConfig.udp);
+    const telnet = new TelnetHandler(appConfig, telnetConfig, APRSConfig.udp + offset);
     await telnet.connect();
 
-    const server = new ServerHandler(APRSConfig.udp, db);
+    const server = new ServerHandler(APRSConfig.udp + offset, db);
     await server.bind();
 
     // Shutdown
