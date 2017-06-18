@@ -1,3 +1,4 @@
+import * as ip from "ip"
 import * as log from "winston"
 
 export namespace Utils {
@@ -25,5 +26,9 @@ export namespace Utils {
                     (options.meta && Object.keys(options.meta).length ? ' ' + JSON.stringify(options.meta) : '' );
             }
         })
+    }
+
+    export function isWifi() {
+        return ip.address() === "192.168.1.10"
     }
 }
