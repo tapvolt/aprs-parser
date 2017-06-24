@@ -34,13 +34,10 @@ export async function main() {
     const appConfig = config.get<types.appConfig>("app"),
         telnetConfig = config.get<types.telnetConfig>("telnet"),
         APRSConfig = config.get<types.APRSConfig>("APRSServer"),
-        mysqlConfig = config.get<types.mysqlConfig>("mysql");
-    let offset = 0;
+        mysqlConfig = config.get<types.mysqlConfig>("mysql"),
+        offset = Utils.isWifi() ? 1 : 0;
 
     Utils.logger();
-    if (Utils.isWifi()) {
-        offset = 1;
-    }
 
     const db = new DbHandler(mysqlConfig);
     await db.connect();
