@@ -1,0 +1,19 @@
+app:
+  name: aprs-parser
+  version: 0.1
+
+telnet:
+  host: first.aprs.net
+  port: 10152
+  username: AE5PL-TS
+  password: -1
+
+APRSServer:
+  udp: 54321
+  filter:
+
+mysql:
+  host: __HOST__
+  username: __USER__
+  password: __PASSWORD__
+  database: __APRS__
