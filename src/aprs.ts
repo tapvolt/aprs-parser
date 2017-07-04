@@ -13,7 +13,7 @@ export default class APRS {
 
         let delimiter = rawPacket.indexOf(":");
         if (delimiter < 0) {
-            log.error("[PARSE] no ':' delimiter found in raw packet"); // add raw
+            log.error("[PARSE] no ':' delimiter found in raw packet", {raw: rawPacket});
             throw new Error;
         }
 
@@ -34,7 +34,7 @@ export default class APRS {
     protected parseHeader(raw: string) : [Callsign, Callsign, any] {
         let delimiter = raw.indexOf(">");
         if (delimiter < 0) {
-            log.error("[PARSE] no '>' delimiter found in raw header"); // add raw
+            log.error("[PARSE] no '>' delimiter found in raw header", {raw: raw});
             throw new Error;
         }
 

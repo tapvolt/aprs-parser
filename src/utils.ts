@@ -18,6 +18,8 @@ export namespace Utils {
         log.add(log.transports.File, {
             filename: "error.log",
             level: "error",
+            json: false,
+            handleExceptions: true,
             timestamp: () => {
                 return new Date().toISOString()
             },
@@ -28,6 +30,10 @@ export namespace Utils {
         })
     }
 
+    /**
+     * Working from / adjust for router config
+     * @returns {boolean}
+     */
     export function isWifi() {
         return ip.address() === "192.168.1.10"
     }

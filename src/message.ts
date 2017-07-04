@@ -1,4 +1,4 @@
-import Callsign from "./callsign";
+import Callsign from "./callsign"
 
 export default class Message {
 
@@ -15,9 +15,9 @@ export default class Message {
     }
 
     public setHeader(from: Callsign, to: Callsign, digiArray: Array<Callsign>) {
-        this.from = from;
-        this.to = to;
-        this.via = digiArray;
+        this.from = from
+        this.to = to
+        this.via = digiArray
     }
 
 }
