@@ -1,11 +1,11 @@
 import * as assert from "assert"
-import * as types from "./types"
 import * as config from "config"
 import * as log from "winston"
-import { Utils } from "./utils"
-import TelnetHandler from "./telnet"
 import DbHandler from "./db"
-import ServerHandler from "./server";
+import ServerHandler from "./server"
+import TelnetHandler from "./telnet"
+import * as types from "./types"
+import { Utils } from "./utils"
 
 export async function main() {
 
@@ -29,38 +29,39 @@ export async function main() {
 
     ].forEach((key: string) => {
         assert(config.has(key), "Missing key in config")
-    });
+    })
 
-    const appConfig = config.get<types.appConfig>("app"),
-        telnetConfig = config.get<types.telnetConfig>("telnet"),
-        APRSConfig = config.get<types.APRSConfig>("APRSServer"),
-        mysqlConfig = config.get<types.mysqlConfig>("mysql"),
-        offset = Utils.isWifi() ? 1 : 0;
+    const appConfig = config.get<types.IAppConfig>("app"),
+        telnetConfig = config.get<types.ITelnetConfig>("telnet"),
+        APRSConfig = config.get<types.IAPRSConfig>("APRSServer"),
+        mysqlConfig = config.get<types.IMysqlConfig>("mysql"),
+        offset = Utils.isWifi() ? 1 : 0
 
-    Utils.logger();
+    Utils.logger()
 
-    const db = new DbHandler(mysqlConfig);
-    await db.connect();
+    const db = new DbHandler(mysqlConfig)
+    await db.connect()
 
-    const telnet = new TelnetHandler(appConfig, telnetConfig, APRSConfig.udp + offset);
-    await telnet.connect();
+    const telnet = new TelnetHandler(appConfig, telnetConfig, APRSConfig.udp + offset)
+    await telnet.connect()
 
-    const server = new ServerHandler(APRSConfig.udp + offset, db);
-    await server.bind();
+    const server = new ServerHandler(APRSConfig.udp + offset, db)
+    await server.bind()
 
     // Shutdown
     const close = () => {
-        telnet.close();
-        server.close();
-        db.close();
-    };
-    process.on("SIGINT", close);
-    process.on("SIGTERM", close);
+        telnet.close()
+        server.close()
+        db.close()
+    }
+
+    process.on("SIGINT", close)
+    process.on("SIGTERM", close)
 }
 
 if (require.main === module) {
     main().catch((err) => {
-        log.error("Error encountered", {error: err});
+        log.error("Error encountered", {error: err})
         process.exit(1)
     })
 }

@@ -10,14 +10,17 @@
     "@types/jest": "^19.2.2",
     "@types/node": "^7.0.16",
     "@types/winston": "^2.3.1",
-    "jest": "^19.0.2",
-    "ts-jest": "^19.0.14",
-    "ts-node": "^3.0.2"
+    "jest": "^20.0.4",
+    "ts-jest": "^20.0.6",
+    "ts-node": "^3.0.2",
+    "tslint": "^5.4.3"
   },
   "scripts": {
     "start": "NODE_CONFI_DIR=./config ts-node src/index.ts",
     "build": "tsc",
-    "test": "NODE_CONFIG_DIR=./config NODE_ENV=testing jest"
+    "test": "NODE_CONFIG_DIR=./config NODE_ENV=testing jest",
+    "lint": "tslint src/**/*.ts -t codeFrame --force",
+    "lint:list": "tslint src/**/*.ts -t verbose --force"
   },
   "dependencies": {
     "config": "^1.26.1",

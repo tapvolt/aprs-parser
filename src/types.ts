@@ -1,27 +1,27 @@
-export interface appConfig {
+export interface IAppConfig {
     name: string
     version: number
 }
 
-export interface telnetConfig {
+export interface ITelnetConfig {
     host: string
     port: number
     username: string
     password: string
 }
 
-export interface APRSConfig {
+export interface IAPRSConfig {
     udp: number
-    filter: Array<string>
+    filter: string[]
 }
 
-export interface mysqlConfig {
+export interface IMysqlConfig {
     host: string
     username: string
     password: string | null
     database: string
 }
 
-export interface APRSMessage {
+export interface IAPRSMessage {
     raw: string
 }
