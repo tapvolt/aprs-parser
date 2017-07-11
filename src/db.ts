@@ -1,12 +1,12 @@
 import * as mysql from "mysql2/promise"
-import { mysqlConfig } from "./types"
+import { IMysqlConfig } from "./types"
 
 export default class DbHandler {
 
     private db: mysql.createConnection
 
     constructor(
-        protected config: mysqlConfig) {
+        protected config: IMysqlConfig) {
     }
 
     public async connect() {
@@ -27,4 +27,3 @@ export default class DbHandler {
     }
 
 }
-

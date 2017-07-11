@@ -2,8 +2,8 @@ import * as log from "winston"
 
 export default class Callsign {
 
-    callSign: string
-    SSID: string
+    private callSign: string
+    private SSID: string
 
     constructor(
         protected rawCallsign: string) {

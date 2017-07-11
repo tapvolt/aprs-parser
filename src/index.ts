@@ -31,10 +31,10 @@ export async function main() {
         assert(config.has(key), "Missing key in config")
     })
 
-    const appConfig = config.get<types.appConfig>("app"),
-        telnetConfig = config.get<types.telnetConfig>("telnet"),
-        APRSConfig = config.get<types.APRSConfig>("APRSServer"),
-        mysqlConfig = config.get<types.mysqlConfig>("mysql"),
+    const appConfig = config.get<types.IAppConfig>("app"),
+        telnetConfig = config.get<types.ITelnetConfig>("telnet"),
+        APRSConfig = config.get<types.IAPRSConfig>("APRSServer"),
+        mysqlConfig = config.get<types.IMysqlConfig>("mysql"),
         offset = Utils.isWifi() ? 1 : 0
 
     Utils.logger()
